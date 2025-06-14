@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>موقع شحن وإدارة ألعاب - بطاقات المشرف</title>
+<style>
+.games-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.game-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  width: 280px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.game-card h3 {
+  margin: 10px 0 15px;
+  font-size: 1.4rem;
+  color: #0059b3;
+}
+
+.game-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.game-card p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.game-card button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.game-card button:hover {
+  background-color: #0056b3;
+}
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0; padding: 0;
+  }
+  header {
+    background-color: #0059b3;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+  }
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 15px 0;
+    background: white;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+  }
+  nav button {
+    background: #007bff;
+    border: none;
+    color: white;
+    padding: 10px 24px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  nav button.active, nav button:hover {
+    background: #0056b3;
+  }
+  main {
+    max-width: 960px;
+    margin: 20px auto 40px auto;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgb(0 0 0 / 0.1);
+  }
+
+  /* بطاقات الألعاب */
+  #userPage {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .game-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    padding: 20px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+	    color: #fd7e14;
+  }
+  .game-card h3 {
+    margin: 0 0 15px 0;
+    color: #0059b3;
+    text-align: center;
+  }
+  .game-card label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .game-card input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    width: 100%;
+    font-size: 14px;
+  }
+  .game-card button {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .game-card button:hover {
+    background-color: #0056b3;
+  }
+
+  /* رسالة */
+  #message {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    min-height: 24px;
+  }
+  #message.success {
+    color: green;
+  }
+  #message.error {
+    color: red;
+  }
+
+  /* لوحة المشرف */
+  #adminPage {
+    display: none;
+  }
+  #adminPage h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #0059b3;
+  }
+  #adminPage table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  #adminPage th, #adminPage td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+  }
+  #adminPage th {
+    background-color: #007bff;
+    color: white;
+  }
+  #adminPage button {
+    margin: 0 4px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .btn-confirm {
+    background-color: #28a745;
+  }
+  .btn-reject {
+    background-color: #dc3545;
+  }
+  .btn-reset {
+    background-color: #6c757d;
+  }
+
+  /* حالة الطلب */
+  .status-جديد {
+    color: #007bff;
+    font-weight: bold;
+  }
+  .status-جاري {
+    color: #fd7e14;
+    font-weight: bold;
+  }
+  .status-تم {
+    color: #28a745;
+    font-weight: bold;
+  }
+  .status-مرفوض {
+    color: #dc3545;
+    font-weight: bold;
+  }
+
+  /* زر مسح */
+  #resetAll {
+    margin-top: 15px;
+    float: left;
+  }
+
+  /* استجابة للأجهزة الصغيرة */
+  @media (max-width: 700px) {
+    #userPage {
+      flex-direction: column;
+      align-items: center;
+    }
+    main {
+      margin: 15px 10px 30px 10px;
+      padding: 15px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>موقع شحن وإدارة ألعاب</h1>
+</header>
+
+<nav>
+  <button id="tabUser" class="active">طلب شحن</button>
+  <button id="tabAdmin">لوحة تحكم المشرف</button>
+</nav>
+
+<main>
+  <!-- صفحة المستخدم -->
+  <section id="userPage">
+    <!-- بطاقة لعبة PUBG -->
+    <div class="game-card" data-game="PUBG">
+      <h3>شحن لعبة PUBG</h3>
+      <label>اسم اللاعب / ID:</label>
+      <input type="text" class="playerId" placeholder="ادخل اسم اللاعب أو رقم التعريف" />
+      <label>عدد النقاط / الباقة:</label>
+      <input type="number" class="package" min="1" placeholder="عدد النقاط أو الباقة" />
+      <label>رقم الهاتف أو وسيلة تواصل:</label>
+      <input type="text" class="contact" placeholder="رقم الهاتف أو واتساب مثلاً" />
+      <button onclick="sendOrder(this)">أرسل طلب شحن PUBG</button>
+    </div>
+
+    <!-- بطاقة لعبة Free Fire -->
+    <div class="game-card" data-game="Free Fire">
+      <h3>شحن لعبة Free Fire</h3>
+      <label>اسم اللاعب / ID:</label>
+      <input type="text" class="playerId" placeholder="ادخل اسم اللاعب أو رقم التعريف" />
+      <label>عدد النقاط / الباقة:</label>
+      <input type="number" class="package" min="1" placeholder="عدد النقاط أو الباقة" />
+      <label>رقم الهاتف أو وسيلة تواصل:</label>
+      <input type="text" class="contact" placeholder="رقم الهاتف أو واتساب مثلاً" />
+      <button onclick="sendOrder(this)">أرسل طلب شحن Free Fire</button>
+    </div>
+
+    <!-- بطاقة لعبة Call of Duty -->
+    <div class="game-card" data-game="Call of Duty">
+      <h3>شحن لعبة Call of Duty</h3>
+      <label>اسم اللاعب / ID:</label>
+      <input type="text" class="playerId" placeholder="ادخل اسم اللاعب أو رقم التعريف" />
+      <label>عدد النقاط / الباقة:</label>
+      <input type="number" class="package" min="1" placeholder="عدد النقاط أو الباقة" />
+      <label>رقم الهاتف أو وسيلة تواصل:</label>
+      <input type="text" class="contact" placeholder="رقم الهاتف أو واتساب مثلاً" />
+      <button onclick="sendOrder(this)">أرسل طلب شحن Call of Duty</button>
+    </div>
+
+    <div id="message"></div>
+  </section>
+
+  <!-- صفحة المشرف -->
+  <section id="adminPage">
+    <h2>طلبات الشحن</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>رقم الطلب</th>
+          <th>اسم اللاعب / ID</th>
+          <th>اللعبة</th>
+          <th>الباقة</th>
+          <th>وسيلة التواصل</th>
+          <th>الحالة</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTableBody">
+        <!-- يتم تعبئة الطلبات هنا -->
+      </tbody>
+    </table>
+    <button id="resetAll" class="btn-reset">مسح جميع الطلبات</button>
+  </section>
+</main>
+
+<script>
+  // التبويبات
+  const tabUser = document.getElementById('tabUser');
+  const tabAdmin = document.getElementById('tabAdmin');
+  const userPage = document.getElementById('userPage');
+  const adminPage = document.getElementById('adminPage');
+  const messageDiv = document.getElementById('message');
+
+  tabUser.addEventListener('click', () => {
+    tabUser.classList.add('active');
+    tabAdmin.classList.remove('active');
+    userPage.style.display = 'flex';
+    adminPage.style.display = 'none';
+    clearMessage();
+  });
+
+  tabAdmin.addEventListener('click', () => {
+    const pwd = prompt('أدخل كلمة مرور المشرف:');
+    if (pwd !== 'admin123') {
+      alert('كلمة المرور خاطئة!');
+      return;
+    }
+    tabAdmin.classList.add('active');
+    tabUser.classList.remove('active');
+    adminPage.style.display = 'block';
+    userPage.style.display = 'none';
+    clearMessage();
+    loadOrders();
+  });
+
+  // حفظ وجلب الطلبات من localStorage
+  function getOrders() {
+    const orders = localStorage.getItem('gameOrders');
+    return orders ? JSON.parse(orders) : [];
+  }
+  function saveOrders(orders) {
+    localStorage.setItem('gameOrders', JSON.stringify(orders));
+  }
+
+  // إرسال طلب جديد
+  function sendOrder(button) {
+    const card = button.closest('.game-card');
+    const playerId = card.querySelector('.playerId').value.trim();
+    const pack = parseInt(card.querySelector('.package').value);
+    const contact = card.querySelector('.contact').value.trim();
+    const game = card.dataset.game;
+
+    if(!playerId || !pack || !contact) {
+      showMessage('يرجى ملء جميع الحقول', 'error');
+      return;
+    }
+
+    let orders = getOrders();
+    const orderNumber = orders.length ? orders[orders.length-1].orderNumber + 1 : 1;
+
+    const newOrder = {
+      orderNumber,
+      playerId,
+      game,
+      package: pack,
+      contact,
+      status: 'جديد',
+      date: new Date().toLocaleString()
+    };
+
+    orders.push(newOrder);
+    saveOrders(orders);
+
+    showMessage(`تم إرسال طلب شحن ${game} بنجاح!`, 'success');
+
+    // تفريغ الحقول
+    card.querySelector('.playerId').value = '';
+    card.querySelector('.package').value = '';
+    card.querySelector('.contact').value = '';
+  }
+
+  // عرض رسالة نجاح أو خطأ
+  function showMessage(msg, type) {
+    messageDiv.textContent = msg;
+    messageDiv.className = '';
+    if(type === 'success') messageDiv.classList.add('success');
+    if(type === 'error') messageDiv.classList.add('error');
+    setTimeout(() => {
+      messageDiv.textContent = '';
+      messageDiv.className = '';
+    }, 5000);
+  }
+  function clearMessage() {
+    messageDiv.textContent = '';
+    messageDiv.className = '';
+  }
+
+  // تحميل الطلبات وعرضها في جدول المشرف
+  function loadOrders() {
+    const tbody = document.getElementById('ordersTableBody');
+    tbody.innerHTML = '';
+    const orders = getOrders();
+    if(orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7">لا توجد طلبات حالياً</td></tr>';
+      return;
+    }
+
+    for (const order of orders) {
+      const tr = document.createElement('tr');
+      // إضافة صنف CSS للحالة مع تحويل الأحرف الكبيرة للصغيرة وبدون مسافات
+      const statusClass = 'status-' + order.status.replace(/\s/g, '').toLowerCase();
+
+      tr.innerHTML = `
+        <td>${order.orderNumber}</td>
+        <td>${order.playerId}</td>
+        <td>${order.game}</td>
+        <td>${order.package}</td>
+        <td>${order.contact}</td>
+        <td class="${statusClass}">${order.status}</td>
+        <td>
+          <button class="btn-confirm" onclick="updateStatus(${order.orderNumber}, 'جاري')">تأكيد</button>
+          <button class="btn-confirm" onclick="updateStatus(${order.orderNumber}, 'تم')">تم</button>
+          <button class="btn-reject" onclick="updateStatus(${order.orderNumber}, 'مرفوض')">رفض</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  // تحديث حالة الطلب
+  function updateStatus(orderNum, newStatus) {
+    let orders = getOrders();
+    const index = orders.findIndex(o => o.orderNumber === orderNum);
+    if(index !== -1) {
+      orders[index].status = newStatus;
+      saveOrders(orders);
+      loadOrders();
+      alert(`تم تحديث حالة الطلب رقم ${orderNum} إلى "${newStatus}"`);
+    }
+  }
+
+  // مسح جميع الطلبات
+  document.getElementById('resetAll').addEventListener('click', () => {
+    if(confirm('هل أنت متأكد من مسح جميع الطلبات؟ لا يمكن التراجع عن هذا الإجراء.')) {
+      localStorage.removeItem('gameOrders');
+      loadOrders();
+    }
+  });
+</script>
+
+</body>
+</html>
